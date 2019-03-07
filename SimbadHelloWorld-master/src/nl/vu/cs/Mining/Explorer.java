@@ -101,8 +101,9 @@ public class Explorer extends Robot implements Subject, TaskHandler{
 		}
 	}
 	
-	public static void setUpChain() {
+	public static void setUpChain(Point3d coords) {
 		Task task = new Task();
+		task.setTask(coords);
 		task.setSuccessor(successor);
 	}
 
