@@ -30,7 +30,7 @@ public class Explorer extends Robot implements Subject, TaskHandler{
 	public static Map<String, Tuple3d> assignedPosition = new HashMap<String, Tuple3d>();
 	private int state = 0;
 	public static int pending = 0;
-	private static TaskHandler successor;
+	public static TaskHandler successor;
 
 	public CameraSensor camera1;
 	public BufferedImage bfImage1;
