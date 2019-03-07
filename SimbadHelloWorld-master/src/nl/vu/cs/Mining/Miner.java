@@ -11,23 +11,19 @@ import javax.vecmath.Tuple3d;
 // The Miner robot observes the Explorer robot, so that it can mine minerals.
 public class Miner extends Robot implements Observer {
 	Subject subject;
+	private TaskHandler successor;
 
 	public Miner(Vector3d position, String name, Subject subject) {
 		super(position, name);
 		this.subject = subject;
 	}
 
-	// The robot will go to the position where a mineral was found.
-//	    private void goToMineThisMineral(Point3d mineralPosition) {
-//	        for (int i = 0; i < this.visitedPosition.size(); i++) {
-//	            if (this.visitedPosition.containsKey(mineralPosition)) {
-//	                this.setTranslationalVelocity(0);
-//	                System.out.println("I have reached my goal");
-//	            }
-//	        }
-//	    }
 
 	public void performBehavior() {
+		handlerRequest();
+	}
+	
+	public void handlerRequest() {
 		boolean mining = false;
 		if (Explorer.pending == 1) {
 			Point3d position = new Point3d(0, 0, 0);
@@ -38,6 +34,7 @@ public class Miner extends Robot implements Observer {
 				if (pair.getKey() == "Pending") {
 					position = (Point3d) pair.getValue();
 					System.out.println("The positions is: " + position);
+					setTask(position);
 					break;
 				}
 			}
@@ -56,8 +53,16 @@ public class Miner extends Robot implements Observer {
 			this.move();
 		}
 		mining = false;
-
 	}
+
+    private void goToMineThisMineral(Point3d mineralPosition, TaskHandler successor) {
+        for (int i = 0; i < this.visitedPosition.size(); i++) {
+            if (this.visitedPosition.containsKey(mineralPosition)) {
+                this.setTranslationalVelocity(0);
+                System.out.println("I have reached my goal");
+            }
+        }
+    }
 
 	public void update(Point3d position) {
 		if (this.subject.getState() == 0) {
@@ -65,4 +70,11 @@ public class Miner extends Robot implements Observer {
 
 		}
 	}
+
+	public void setTask(Point3d mineralPosition) {
+	    TaskHandler successor = this.successor;
+		goToMineThisMineral(mineralPosition, successor);
+		
+	}
+
 }

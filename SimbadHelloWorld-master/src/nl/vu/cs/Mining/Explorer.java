@@ -20,7 +20,7 @@ import javax.vecmath.Point3d;
 import javax.vecmath.Tuple3d;
 
 // The Explorer robot searches for minerals (exploring) and it keeps track of the mission.
-public class Explorer extends Robot implements Subject {
+public class Explorer extends Robot implements Subject, TaskHandler{
 	private static Robot exploringRobot = new Explorer(); // Attribute needed for the Singleton Design Pattern.
 	private MissionConfiguration mission = new MissionConfiguration(); // Instance to keep track of the mission.
 	// These are the attributes that are needed for the Observer Design Pattern:
@@ -30,6 +30,7 @@ public class Explorer extends Robot implements Subject {
 	public static Map<String, Tuple3d> assignedPosition = new HashMap<String, Tuple3d>();
 	private int state = 0;
 	public static int pending = 0;
+	private static TaskHandler successor;
 
 	public CameraSensor camera1;
 	public BufferedImage bfImage1;
@@ -99,6 +100,11 @@ public class Explorer extends Robot implements Subject {
 			this.setState(1); // State 1 implies that there is no minerals to be mined yet.
 		}
 	}
+	
+	public static void setUpChain() {
+		Task task = new Task();
+		task.setSuccessor(successor);
+	}
 
 	private void checkResponsabilities(Map mp, Point3d position) {
 			assignedPosition.clear();
@@ -131,5 +137,11 @@ public class Explorer extends Robot implements Subject {
 		if (this.getCounter() % 10 == 0) {
 			searchMinerals();
 		}
+	}
+
+	@Override
+	public void setSuccessor(TaskHandler successor) {
+		// TODO Auto-generated method stub
+		
 	}
 }
